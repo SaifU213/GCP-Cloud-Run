@@ -1,5 +1,5 @@
 steps:
-  # Build backend image
+  # Build backend image from Dockerfile
   - name: 'gcr.io/cloud-builders/docker'
     id: 'build-backend'
     args:
@@ -9,9 +9,10 @@ steps:
       - '-t'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REPO}/saif-bank-backend:latest'
       - '.'
+  # Expects dockerfile here
     dir: 'bank-backend'
 
-  # Push backend image
+  # Push backend image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     id: 'push-backend'
     args:

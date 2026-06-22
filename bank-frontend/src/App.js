@@ -71,7 +71,7 @@ export default function App() {
       <CssBaseline />
       <Box sx={{ display: 'flex' }}>
         <NavigationBar handleDrawerToggle={handleDrawerToggle} primary='FDM Bank'>
-          <NavigationBarLink primary='Log In'/>
+          <NavigationBarLink primary='Log Out'/>
           <NavigationBarLink primary='Register'/>
         </NavigationBar>
         <NavigationDrawer handleDrawerClose={handleDrawerClose} isMobileOpen={isMobileOpen} drawerWidth={drawerWidth}>
