@@ -1,7 +1,7 @@
 steps:
-  # Step 1: Build the backend container image
+  # Build backend image
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'build-backend-image'
+    id: 'build-backend'
     args:
       - 'build'
       - '-t'
@@ -11,17 +11,17 @@ steps:
       - '.'
     dir: 'bank-backend'
 
-  # Step 2: Push backend image to Artifact Registry
+  # Push backend image
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'push-backend-image'
+    id: 'push-backend'
     args:
       - 'push'
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REPO}/saif-bank-backend'
     waitFor:
-      - 'build-backend-image'
+      - 'build-backend'
 
-  # Step 3: Deploy backend to Cloud Run
+  # Deploy backend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'deploy-backend'
     entrypoint: 'gcloud'
@@ -40,7 +40,7 @@ steps:
       - '--max-instances=3'
       - '--service-account=${_SERVICE_ACCOUNT}'
     waitFor:
-      - 'push-backend-image'
+      - 'push-backend'
 
 substitutions:
   _REGION: northamerica-northeast2

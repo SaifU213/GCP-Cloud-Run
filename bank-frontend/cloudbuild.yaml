@@ -1,20 +1,21 @@
 steps:
-  # Step 1: Get backend URL
+  # Get backend URL from Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'get-backend-url'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          gcloud run services describe saif-bank-backend \
+          BACKEND_URL=$(gcloud run services describe saif-bank-backend \
             --region=${_REGION} \
-            --format='value(status.url)' > backend_url.txt
+            --format='value(status.url)')
 
+          echo $$BACKEND_URL > backend_url.txt
           cat backend_url.txt
 
-  # Step 2: Build frontend image
+  # Build frontend with backend URL
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'build-frontend-image'
+    id: 'build-frontend'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -26,21 +27,20 @@ steps:
             -t ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REPO}/saif-bank-frontend:${SHORT_SHA} \
             -t ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REPO}/saif-bank-frontend:latest \
             ./bank-frontend
-
     waitFor:
       - get-backend-url
 
-  # Step 3: Push image
+  # Push frontend image
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'push-frontend-image'
+    id: 'push-frontend'
     args:
       - 'push'
       - '--all-tags'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REPO}/saif-bank-frontend'
     waitFor:
-      - build-frontend-image
+      - build-frontend
 
-  # Step 4: Deploy to Cloud Run
+  # Deploy frontend to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'deploy-frontend'
     entrypoint: 'gcloud'
@@ -59,7 +59,7 @@ steps:
       - '--max-instances=3'
       - '--service-account=${_SERVICE_ACCOUNT}'
     waitFor:
-      - push-frontend-image
+      - push-frontend
 
 substitutions:
   _REGION: northamerica-northeast2
