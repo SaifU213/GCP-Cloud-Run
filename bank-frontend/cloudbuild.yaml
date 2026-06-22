@@ -6,7 +6,7 @@ steps:
     args:
       - '-c'
       - |
-          BACKEND_URL="https://saif-bank-backend-79505229087.northamerica-northeast2.run.app"
+          BACKEND_URL="https://saif-bank-backend-79505229087.northamerica-northeast2.run.app/api/v1/"
 
           echo $$BACKEND_URL > backend_url.txt
           cat backend_url.txt
