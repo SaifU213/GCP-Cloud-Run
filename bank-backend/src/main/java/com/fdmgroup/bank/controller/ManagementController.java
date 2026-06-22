@@ -3,6 +3,7 @@ package com.fdmgroup.bank.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/v1/management")
+@CrossOrigin(origins = "https://saif-bank-frontend-79505229087.northamerica-northeast2.run.app", allowedHeaders = "*")
 public class ManagementController
 {
 	private IManagementService managementService;
