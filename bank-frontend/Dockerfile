@@ -7,7 +7,7 @@ WORKDIR /app
 ARG REACT_APP_API_URL
 
 # Inject the API URL into the environment variable
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_API_URL=https://saif-bank-backend-79505229087.northamerica-northeast2.run.app
 
 COPY package*.json ./
 RUN npm ci --only=production

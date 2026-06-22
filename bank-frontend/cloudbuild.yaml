@@ -1,14 +1,12 @@
 steps:
-  # Get backend URL from Cloud Run
+  # Set backend URL (hardcoded)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'get-backend-url'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-          BACKEND_URL=$(gcloud run services describe saif-bank-backend \
-            --region=${_REGION} \
-            --format='value(status.url)')
+          BACKEND_URL="https://saif-bank-backend-79505229087.northamerica-northeast2.run.app"
 
           echo $$BACKEND_URL > backend_url.txt
           cat backend_url.txt
